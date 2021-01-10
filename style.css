@@ -1,0 +1,225 @@
+:root {
+    --light-theme-main-color:#FCECC9;
+    --light-theme-secondary-color:#F93943;
+
+    --main:#2D0320;
+    --secondary:#99D5C9;
+    --shadowBig:27px 27px 62px #200216, -27px -27px 62px #3b042a;
+    --shadowSmall:inset 9px 9px 25px #26031b, inset -9px -9px 25px #340325;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    outline: none;
+    font-family: 'Comfortaa', cursive;
+    transition: 0.4s;
+    user-select: none;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main);
+}
+
+.wrapper {
+    width: 440px;
+    height: 440px;
+    background-color: var(--secondary);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: var(--shadowBig);
+    position: relative;
+}
+.cell {
+    width: 128px;
+    height: 128px;
+    background-color: var(--main);
+    border-radius: 30px;
+    margin: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadowSmall);
+    transition: 0.4s;
+    animation: expand .4s ease-in-out;
+}
+
+@keyframes expand {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+.show {
+    opacity: 1;
+    z-index: 1;
+}
+
+.hide {
+    opacity: 0;
+    z-index: -1;
+}
+
+#main-game {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.x {
+    background-color: var(--secondary);
+    height: 100px;
+    position: relative;
+    width: 20px;
+    transform: rotate(45deg);
+    border-radius: 10px;
+    animation: expand .2s ease-in-out;
+}
+
+.x::after {
+    background: var(--secondary);
+    content: "";
+    height: 20px;
+    left: -40px;
+    position: absolute;
+    top: 40px;
+    width: 100px;
+    border-radius: 10px;
+    transition: 0.4s;
+    animation: expand .2s ease-in-out;
+}
+
+.o {
+    width: 80px;
+    height: 80px;
+    background-color: var(--secondary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: expand .2s ease-in-out;
+}
+
+.o::after {
+    content: '';
+    background: var(--main);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+.start {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    transform: translate(-50%,-50%);
+    color: var(--main);
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.start:active {
+    top: 51%;
+}
+
+.theme, .restart {
+    position: fixed;
+    top: 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--secondary);
+    cursor: pointer;
+}
+
+.theme {
+    right: 30px;
+}
+
+.restart {
+    left: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.restart::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: var(--main);
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+.win-message ,.draw-message, .warn-message {
+    animation: expand .4s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    color: var(--main);
+}
+
+.win-message {
+    width: 440px;
+    height: 440px;
+    background-color: var(--secondary);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .4s;
+}
+
+.draw-message {
+    width: 440px;
+    height: 440px;
+    background-color: var(--secondary);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .4s;
+}
+
+.warn-message {
+    position: fixed;
+    top: 12vh;
+    transition: 1s;
+    animation: showAndHide 1.5s forwards;
+    background-color: var(--secondary);
+    color: var(--main);
+    border-radius: 60px;
+    padding: 20px 26px;
+    font-size: 20px;
+}
+
+@keyframes showAndHide {
+    0% {
+        opacity: 0;
+        z-index: -1;
+    }
+    50% {
+        opacity: 1;
+        z-index: 1;
+    }
+    100% {
+        opacity: 0;
+        z-index: -1;
+    }
+}
