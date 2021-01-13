@@ -39,6 +39,7 @@ body {
     box-shadow: var(--shadowBig);
     position: relative;
 }
+
 .cell {
     width: 128px;
     height: 128px;
@@ -52,6 +53,42 @@ body {
     box-shadow: var(--shadowSmall);
     transition: 0.4s;
     animation: expand .4s ease-in-out;
+    position: relative;
+}
+
+.cell:hover {
+    /* background-color: #848282a6;
+    background-color: #00000080; */
+    /* transition: .4s; */
+}
+
+/* .cell:hover.cell::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.479);
+    transition: .4s;
+} */
+
+/* .active-cell {
+    width: 128px;
+    height: 128px; */
+    /* background-color: rgba(238, 238, 238, 0.521); */
+    /* border-radius: 30px; */
+    /* transition: .4s; */
+    /* z-index: -1; */
+    /* position: absolute;
+    top: 0;
+    left: 0;
+} */
+
+.active-cell {
+    background-color: #00000080;
+}
+.active-cell:hover {
+    /* transition: .4s;
+    background-color: #000; */
 }
 
 @keyframes expand {
@@ -108,6 +145,7 @@ body {
     justify-content: center;
     align-items: center;
     animation: expand .2s ease-in-out;
+    /* z-index: 1; */
 }
 
 .o::after {
@@ -117,6 +155,7 @@ body {
     height: 56px;
     border-radius: 50%;
     transition: 0.4s;
+    /* z-index: -1; */
 }
 
 .start {

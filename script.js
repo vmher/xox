@@ -6,13 +6,37 @@
     start.addEventListener('click', e => {
         start.classList.add('hide');
         Game.drawTable(9);
+        Game.activeCell = document.querySelector('#cell5');
+        window.addEventListener("keyup", function(event) {
+            switch(event.code) {
+                case "KeyS":
+                case "ArrowDown":
+                    Game.handleKeyUp('Down');
+                    break;
+                case "KeyW":
+                case "ArrowUp":
+                    Game.handleKeyUp('Up');
+                    break;
+                case "KeyA":
+                case "ArrowLeft":
+                    Game.handleKeyUp('Left');
+                    break;
+                case "KeyD":
+                case "ArrowRight":
+                    Game.handleKeyUp('Right');
+                    break;
+                case "Space":
+                    Game.handleKeyUp('Space');
+                    break;
+                }
+        }, true);
         Game.handlePlayerClick();
     });
 })();
 
 class Game {
     constructor(){}
-
+    activeCell;
     static drawTable(dimension) {
         var mainGame = document.getElementById('main-game');
         for (let x = 1; x <= dimension; x++) {
@@ -63,6 +87,11 @@ class Game {
     static handlePlayerClick(){
         var clickCounter = 0;
         document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('mouseover', e => {
+                this.activeCell.classList.remove('active-cell');
+                this.activeCell = e.target;
+                this.activeCell.classList.add('active-cell');
+            });
             cell.addEventListener('click', e => {
                 var cellId = cell.getAttribute('id');
                 if (this.checkCell(cellId)) {
@@ -88,6 +117,67 @@ class Game {
                 };
             })
         });
+    }
+    static handleKeyUp(keyCode) {
+        if (keyCode === 'Down') {
+            this.moveActiveCell(this.activeCell, 'Down');
+        } else if (keyCode === 'Up') {
+            this.moveActiveCell(this.activeCell, 'Up');
+        } else if (keyCode === 'Right') {
+            this.moveActiveCell(this.activeCell, 'Right');
+        } else if (keyCode === 'Left') {
+            this.moveActiveCell(this.activeCell, 'Left');
+        } else if (keyCode === 'Space') {
+            this.activeCell.click();
+        }
+    }
+    static moveActiveCell(currentCell, direction) {
+        this.activeCell.classList.remove('active-cell');
+        var activeCellId = currentCell.getAttribute('id');
+        activeCellId = Number(activeCellId[4]);
+        if (direction === 'Up') {
+            if (activeCellId === 1) {
+                activeCellId = 7;
+            } else if (activeCellId === 2) {
+                activeCellId = 8;
+            } else if (activeCellId === 3) {
+                activeCellId = 9;
+            } else {
+                activeCellId -= 3;
+            }
+        } else if (direction === 'Down') {
+            if (activeCellId === 7) {
+                activeCellId = 1;
+            } else if (activeCellId === 8) {
+                activeCellId = 2;
+            } else if (activeCellId === 9) {
+                activeCellId = 3;
+            } else {
+                activeCellId += 3;
+            }
+        } else if (direction === 'Left') {
+            if (activeCellId === 1) {
+                activeCellId = 3;
+            } else if (activeCellId === 4) {
+                activeCellId = 6;
+            } else if (activeCellId === 7) {
+                activeCellId = 9;
+            } else {
+                activeCellId--;
+            }
+        } else if (direction === 'Right') {
+            if (activeCellId === 9) {
+                activeCellId = 7;
+            } else if (activeCellId === 6) {
+                activeCellId = 4;
+            } else if (activeCellId === 3) {
+                activeCellId = 1;
+            } else{
+                activeCellId++;
+            }
+        }
+        this.activeCell = document.querySelector('#cell' + activeCellId);
+        this.activeCell.classList.add('active-cell');
     }
 }
 
@@ -137,11 +227,10 @@ class Player {
 let playerX = new Player('x',false,[],false);
 let playerO = new Player('o',true,[],false);
 
+
 //
 //
 // change cursor??
-// cell hover effect?! for further use with keyboard
-// scale for bigger dimensions????
-// celebrate?! confetti? scale 'player wins'? strike the winner combination, pulse
+// celebrate?! confetti? scale 'player wins'? strike the winner combination, pulse, disable controls
 // 
 // 
