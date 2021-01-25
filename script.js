@@ -136,42 +136,26 @@ class Game {
         var activeCellId = currentCell.getAttribute('id');
         activeCellId = Number(activeCellId[4]);
         if (direction === 'Up') {
-            if (activeCellId === 1) {
-                activeCellId = 7;
-            } else if (activeCellId === 2) {
-                activeCellId = 8;
-            } else if (activeCellId === 3) {
-                activeCellId = 9;
+            if (activeCellId === 1 || activeCellId === 2 || activeCellId === 3) {
+                activeCellId += 6;
             } else {
                 activeCellId -= 3;
             }
         } else if (direction === 'Down') {
-            if (activeCellId === 7) {
-                activeCellId = 1;
-            } else if (activeCellId === 8) {
-                activeCellId = 2;
-            } else if (activeCellId === 9) {
-                activeCellId = 3;
+            if (activeCellId === 7 || activeCellId === 8 || activeCellId === 9) {
+                activeCellId -= 6;
             } else {
                 activeCellId += 3;
             }
         } else if (direction === 'Left') {
-            if (activeCellId === 1) {
-                activeCellId = 3;
-            } else if (activeCellId === 4) {
-                activeCellId = 6;
-            } else if (activeCellId === 7) {
-                activeCellId = 9;
+            if (activeCellId === 1 || activeCellId === 4 || activeCellId === 7) {
+                activeCellId += 2;
             } else {
                 activeCellId--;
             }
         } else if (direction === 'Right') {
-            if (activeCellId === 9) {
-                activeCellId = 7;
-            } else if (activeCellId === 6) {
-                activeCellId = 4;
-            } else if (activeCellId === 3) {
-                activeCellId = 1;
+            if (activeCellId === 9 || activeCellId === 6 || activeCellId === 3) {
+                activeCellId -= 2;
             } else{
                 activeCellId++;
             }

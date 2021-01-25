@@ -262,3 +262,48 @@ body {
         z-index: -1;
     }
 }
+
+@media (max-width: 540px) {
+    .wrapper{
+        width: 300px;
+        height: 300px;
+        padding: 6px;
+    }
+    .cell{
+        width: 84px;
+        height: 84px;
+    }
+    .x {
+        height: 74px;
+        width: 14px;
+    }
+    .x::after {
+        content: "";
+        height: 14px;
+        left: -30px;
+        top: 30px;
+        width: 74px;
+    }
+    .o {
+        width: 60px;
+        height: 60px;
+    }
+    .o::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+    }
+    .win-message, .draw-message {
+        font-size: 48px;
+    }
+    .win-message, .draw-message {
+        width: 300px;
+        height: 300px;
+    }
+    .warn-message {
+        top: 10vh;
+        border-radius: 40px;
+        padding: 9px 16px 10px 16px;
+        font-size: 16px;
+    }
+}
