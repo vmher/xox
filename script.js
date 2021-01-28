@@ -2,41 +2,44 @@
 (function() {
     document.querySelector('.theme').addEventListener('click', e => Game.toggleTheme());
     document.querySelector('.restart').addEventListener('click', e => location.reload());
-    var start = document.querySelector('.start');
-    start.addEventListener('click', e => {
-        start.classList.add('hide');
+
+    document.querySelector('.start').addEventListener('click', e => {
+        e.target.classList.add('hide');
         Game.drawTable(9);
         Game.activeCell = document.querySelector('#cell5');
-        window.addEventListener("keyup", function(event) {
-            switch(event.code) {
-                case "KeyS":
-                case "ArrowDown":
-                    Game.handleKeyUp('Down');
-                    break;
-                case "KeyW":
-                case "ArrowUp":
-                    Game.handleKeyUp('Up');
-                    break;
-                case "KeyA":
-                case "ArrowLeft":
-                    Game.handleKeyUp('Left');
-                    break;
-                case "KeyD":
-                case "ArrowRight":
-                    Game.handleKeyUp('Right');
-                    break;
-                case "Space":
-                    Game.handleKeyUp('Space');
-                    break;
-                }
-        }, true);
         Game.handlePlayerClick();
     });
+
+    window.addEventListener("keyup", function(event) {
+        switch(event.code) {
+            case "KeyS":
+            case "ArrowDown":
+                Game.handleKeyUp('Down');
+                break;
+            case "KeyW":
+            case "ArrowUp":
+                Game.handleKeyUp('Up');
+                break;
+            case "KeyA":
+            case "ArrowLeft":
+                Game.handleKeyUp('Left');
+                break;
+            case "KeyD":
+            case "ArrowRight":
+                Game.handleKeyUp('Right');
+                break;
+            case "Space":
+                Game.handleKeyUp('Space');
+                break;
+            }
+    }, true);
+
 })();
 
 class Game {
     constructor(){}
     activeCell;
+    activePlayer;
     static drawTable(dimension) {
         var mainGame = document.getElementById('main-game');
         for (let x = 1; x <= dimension; x++) {
@@ -56,21 +59,20 @@ class Game {
         var darkSecondary = '#99D5C9';
         var darkShadowBig = '27px 27px 62px #200216, -27px -27px 62px #3b042a';
         var darkshadowSmall = 'inset 9px 9px 25px #26031b, inset -9px -9px 25px #340325';
-
         function getColor() {
             var currentColor = window.getComputedStyle(root).getPropertyValue('--main');
             return currentColor;
-        }
-        if (getColor() === darkMain) {
-            setColor(lightMain, lightSecondary, lightShadowBig, lightShadowSmall);
-        } else {
-            setColor(darkMain, darkSecondary, darkShadowBig, darkshadowSmall);
         }
         function setColor(main, secondary, shadowBig, shadowSmall) {
             root.style.setProperty('--main', main);
             root.style.setProperty('--secondary', secondary);
             root.style.setProperty('--shadowBig', shadowBig);
             root.style.setProperty('--shadowSmall', shadowSmall);
+        }
+        if (getColor() === darkMain) {
+            setColor(lightMain, lightSecondary, lightShadowBig, lightShadowSmall);
+        } else {
+            setColor(darkMain, darkSecondary, darkShadowBig, darkshadowSmall);
         }
     }
     static checkCell(cellId) {
@@ -87,26 +89,28 @@ class Game {
     static handlePlayerClick(){
         var clickCounter = 0;
         document.querySelectorAll('.cell').forEach(cell => {
+            
             cell.addEventListener('mouseover', e => {
                 this.activeCell.classList.remove('active-cell');
-                this.activeCell = e.target;
+                this.activeCell = cell;
                 this.activeCell.classList.add('active-cell');
             });
+            
             cell.addEventListener('click', e => {
                 var cellId = cell.getAttribute('id');
                 if (this.checkCell(cellId)) {
-                    var activePlayer = Player.togglePlayer();
+                    this.activePlayer = Player.togglePlayer();
                     clickCounter++;
-                    activePlayer.occupyCell(cellId);
-                    activePlayer.clickedCells.push(Number(cellId[4]));
+                    this.activePlayer.occupyCell(cellId);
+                    this.activePlayer.clickedCells.push(Number(cellId[4]));
                     if (clickCounter > 4) {
-                        activePlayer.checkWinner(activePlayer);
+                        this.activePlayer.checkWinner(this.activePlayer);
                     }
-                    if (clickCounter === 9 && !activePlayer.checkWinner(activePlayer)) {
+                    if (clickCounter === 9 && !this.activePlayer.checkWinner(this.activePlayer)) {
                         this.draw();
                     }
-                    if (activePlayer.isWinner) {
-                        activePlayer.celebrate(activePlayer);
+                    if (this.activePlayer.isWinner) {
+                        this.activePlayer.celebrate(this.activePlayer);
                     }
                 } else {
                     var warnMessage = document.createElement('div');
@@ -115,7 +119,9 @@ class Game {
                     document.querySelector('.wrapper').appendChild(warnMessage);
                     setTimeout(() => document.querySelector('.wrapper').removeChild(warnMessage), 3000);
                 };
+
             })
+
         });
     }
     static handleKeyUp(keyCode) {
@@ -166,7 +172,7 @@ class Game {
 }
 
 class Player {
-    constructor (playerId,isActive,clickedCells,isWinner) {
+    constructor (playerId, isActive, clickedCells, isWinner) {
         this.playerId = playerId;
         this.isActive = isActive;
         this.clickedCells = clickedCells;
@@ -176,7 +182,6 @@ class Player {
         var mark = document.createElement('div');
         mark.setAttribute('class', this.playerId);
         document.querySelector('#' + cellId).appendChild(mark);
-        
     }
     checkWinner (player) {
         var checker = (array, target) => target.every(v => array.includes(v));
@@ -195,13 +200,16 @@ class Player {
         document.querySelector('.wrapper').appendChild(winnerMessage);
     }
     static togglePlayer() {
+        var cells = document.querySelectorAll('.cell');
         if (playerX.isActive) {
             playerX.isActive = false;
             playerO.isActive = true;
+            cells.forEach((cell) => cell.style.cursor = 'url(./x.cur), auto');
             return playerO;
         } else{
             playerX.isActive = true;
             playerO.isActive = false;
+            cells.forEach((cell) => cell.style.cursor = 'url(./o.cur), auto');
             return playerX;
         }
     }
@@ -214,7 +222,6 @@ let playerO = new Player('o',true,[],false);
 
 //
 //
-// change cursor??
 // celebrate?! confetti? scale 'player wins'? strike the winner combination, pulse, disable controls
 // 
 // 
